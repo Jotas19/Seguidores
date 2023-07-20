@@ -1,0 +1,40 @@
+.slide-in {
+    animation-name: slideIn;
+    animation-duration: 750ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+/* Define la clase de animación */
+.ampliacion-elemento {
+    transition: transform 0.3s ease; /* Agrega una transición suave a la propiedad transform */
+    margin-bottom: 20px; /* Espacio entre los elementos */
+  }
+  
+  .ampliacion-elemento:hover {
+    transform: scale(1.1) translateY(-10px); /* Amplía el elemento al 110% y lo desplaza hacia arriba 10px */
+    transform-origin: center; /* Establece el punto de origen de la transformación en el centro inferior del elemento */
+    margin-bottom: 30px; /* Espacio adicional entre los elementos al pasar el mouse sobre ellos */
+  }
+
+  .tarjeta-govco .container-img-tarjeta-govco .image-tarjeta-govco {
+	min-width: 100%;
+	min-height: 100%;
+	object-fit: cover;
+	object-position: center center;
+}
+
