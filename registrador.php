@@ -116,26 +116,29 @@ if (isset($_SESSION['tipo_usuario'])) {
     <div class="container text-center mt-4 slide-in">
         <h1 class="h1 m-4">Bienvenido al portal de registrador</h1>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
-          <div class="col-4 mb-4 ampliacion-elemento">
+        
+        <div class="col-4 mb-4 ampliacion-elemento">
             <div class="card">
-              <img src="src/card1_registrador.jpeg" class="card-img-top" alt="...">
+              <img src="src/card4_registrador.jpeg" class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title">1. Lugar</h5>
-                <p class="card-text">Bienvenido al módulo de gestión de lugares. Aquí puedes administrar los lugares disponibles para las votaciones. Puedes agregar nuevos lugares, editar información existente o eliminar lugares.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLugarModal">Ver más</button>
+                <h5 class="card-title">1. Coordinador</h5>
+                <p class="card-text">Bienvenido al módulo de gestión de coordinadores. Aquí puedes administrar a los coordinadores responsables de los lugares de votación. Puedes agregar nuevos coordinadores, actualizar información o eliminar coordinadores existentes.</p>
+                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearCoordinadorModal">Ver más</button>
               </div>
             </div>
           </div>
+
           <div class="col-4 mb-4 ampliacion-elemento">
             <div class="card">
-              <img src="src/card2_registrador.jpeg" class="card-img-top" alt="...">
+              <img src="src/card5_registrador.jpeg" class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title">2. Mesa</h5>
-                <p class="card-text">Bienvenido al módulo de gestión de mesas. Aquí puedes administrar las mesas de votación. Puedes agregar nuevas mesas, asignar ubicaciones o modificar información existente.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearMesaModal">Ver más</button>
+                <h5 class="card-title">2. Líder</h5>
+                <p class="card-text">Bienvenido al módulo de gestión de líderes. Aquí puedes administrar a los líderes de las comunidades. Puedes agregar nuevos líderes, editar información existente o eliminar líderes.</p>
+                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLiderModal">Ver más</button>
               </div>
             </div>
           </div>
+
           <div class="col-4 mb-4 ampliacion-elemento">
             <div class="card">
               <img src="src/card3_registrador.jpeg" class="card-img-top" alt="...">
@@ -146,26 +149,20 @@ if (isset($_SESSION['tipo_usuario'])) {
               </div>
             </div>
           </div>
-          <div class="col-4 mb-4 ampliacion-elemento">
+
+        <div class="col-4 mb-4 ampliacion-elemento">
             <div class="card">
-              <img src="src/card4_registrador.jpeg" class="card-img-top" alt="...">
+              <img src="src/card1_registrador.jpeg" class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title">4. Coordinador</h5>
-                <p class="card-text">Bienvenido al módulo de gestión de coordinadores. Aquí puedes administrar a los coordinadores responsables de los lugares de votación. Puedes agregar nuevos coordinadores, actualizar información o eliminar coordinadores existentes.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearCoordinadorModal">Ver más</button>
+                <h5 class="card-title">4. Lugar</h5>
+                <p class="card-text">Bienvenido al módulo de gestión de lugares. Aquí puedes administrar los lugares disponibles para las votaciones. Puedes agregar nuevos lugares, editar información existente o eliminar lugares.</p>
+                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLugarModal">Ver más</button>
               </div>
             </div>
           </div>
-          <div class="col-4 mb-4 ampliacion-elemento">
-            <div class="card">
-              <img src="src/card5_registrador.jpeg" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">5. Líder</h5>
-                <p class="card-text">Bienvenido al módulo de gestión de líderes. Aquí puedes administrar a los líderes de las comunidades. Puedes agregar nuevos líderes, editar información existente o eliminar líderes.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLiderModal">Ver más</button>
-              </div>
-            </div>
-          </div>
+          
+              
+
         </div>
       </div>
 
@@ -180,22 +177,22 @@ if (isset($_SESSION['tipo_usuario'])) {
                 </div>
                 <div class="modal-body">
                 <form>
+
                     <div class="mb-3">
                     <label for="inputLugar" class="form-label">Lugar</label>
                     <input type="text" autocomplete="off" class="form-control" id="inputLugar">
                     </div>
+
                     <div class="mb-3">
-                    <label for="inputVotante" class="form-label">Registrante</label>
-                    <input type="text" autocomplete="off" class="form-control" id="inputVotante">
-                    </div>
-                    <div class="mb-3">
-                    <label for="inputDireccion" class="form-label">Dirección</label>
+                    <label for="inputDireccion" class="form-label">Dirección del lugar</label>
                     <input type="text" autocomplete="off" class="form-control" id="inputDireccion">
                     </div>
+                    
                     <div class="mb-3">
                     <label for="inputMesas" class="form-label">Cantidad de Mesas</label>
                     <input type="number" autocomplete="off" class="form-control" id="inputMesas">
                     </div>
+
                     <div class="mb-3">
                     <label for="inputComuna" class="form-label">Comuna</label>
                     <select class="form-select" id="inputComuna">
@@ -204,6 +201,7 @@ if (isset($_SESSION['tipo_usuario'])) {
                         <!-- Otras opciones de comuna... -->
                     </select>
                     </div>
+                    
                     <button type="submit" class="btn btn-orange">Crear</button>
                 </form>
                 </div>
@@ -211,31 +209,8 @@ if (isset($_SESSION['tipo_usuario'])) {
             </div>
         </div>
         <!--Modal del Lugar-->
-        <!--Modal de Mesa-->
-        <div class="modal fade" data-bs-backdrop="static" id="crearMesaModal" tabindex="-1" aria-labelledby="crearMesaModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="crearMesaModalLabel">Crear Mesa</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="mb-3">
-                      <label for="inputNumeroMesa" class="form-label">Número de Mesa</label>
-                      <input type="text" autocomplete="off" class="form-control" id="inputNumeroMesa">
-                    </div>
-                    <div class="mb-3">
-                      <label for="inputMesaPK" class="form-label">Mesa PK</label>
-                      <input type="text" autocomplete="off" class="form-control" id="inputMesaPK">
-                    </div>
-                    <button type="submit" class="btn btn-orange">Crear</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--Modal de Mesa-->
+                              
+
           <!-- Modal de Comuna-->
             <div class="modal fade" data-bs-backdrop="static" id="crearComunaModal" tabindex="-1" aria-labelledby="crearComunaModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -261,6 +236,7 @@ if (isset($_SESSION['tipo_usuario'])) {
                 </div>
             </div>
             <!-- Modal de Comuna-->
+
             <!-- Modal de Coordinador-->
             <div class="modal fade" data-bs-backdrop="static" id="crearCoordinadorModal" tabindex="-1" aria-labelledby="crearCoordinadorModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -271,33 +247,36 @@ if (isset($_SESSION['tipo_usuario'])) {
                     </div>
                     <div class="modal-body">
                       <form>
+
                         <div class="mb-3">
                           <label for="inputIdCoordinador" class="form-label">ID de Coordinador</label>
                           <input type="text"  autocomplete="off" class="form-control" id="inputIdCoordinador">
                         </div>
-                        <div class="mb-3">
-                          <label for="inputCedula" class="form-label">Cédula</label>
-                          <input type="text" autocomplete="off" class="form-control" id="inputCedula">
-                        </div>
+
                         <div class="mb-3">
                           <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
                           <input type="text" autocomplete="off" class="form-control" id="inputNombreCoordinador">
                         </div>
+
                         <div class="mb-3">
                           <label for="inputDireccionCoordinador" class="form-label">Dirección del Coordinador</label>
                           <input type="text" autocomplete="off" class="form-control" id="inputDireccionCoordinador">
                         </div>
+
                         <div class="mb-3">
                           <label for="inputTelefonoCoordinador" class="form-label">Teléfono del Coordinador</label>
                           <input type="text" autocomplete="off" class="form-control" id="inputTelefonoCoordinador">
                         </div>
+
                         <button type="submit" class="btn btn-orange">Crear</button>
+
                       </form>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- Modal de Coordinador-->
+
               <!--Modal de Líder-->
                 <div class="modal fade" data-bs-backdrop="static" id="crearLiderModal" tabindex="-1" aria-labelledby="crearLiderModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -312,26 +291,27 @@ if (isset($_SESSION['tipo_usuario'])) {
                             <label for="inputIdLider" class="form-label">ID de Líder</label>
                             <input type="text"  autocomplete="off" class="form-control" id="inputIdLider">
                             </div>
-                            <div class="mb-3">
-                            <label for="inputCedulaLider" class="form-label">Cédula</label>
-                            <input type="text" autocomplete="off"  class="form-control" id="inputCedulaLider">
-                            </div>
+
                             <div class="mb-3">
                             <label for="inputNombreLider" class="form-label">Nombre del Líder</label>
                             <input type="text"  autocomplete="off" class="form-control" id="inputNombreLider">
                             </div>
+
                             <div class="mb-3">
                             <label for="inputDireccionLider" class="form-label">Dirección del Líder</label>
                             <input type="text" autocomplete="off" class="form-control" id="inputDireccionLider">
                             </div>
+
                             <div class="mb-3">
                             <label for="inputTelefonoLider" class="form-label">Teléfono del Líder</label>
                             <input type="text" autocomplete="off" class="form-control" id="inputTelefonoLider">
                             </div>
+
                             <div class="mb-3">
                             <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
                             <input type="text"  autocomplete="off" class="form-control" id="inputNombreCoordinador">
                             </div>
+
                             <button type="submit" class="btn btn-orange">Crear</button>
                         </form>
                         </div>
@@ -339,11 +319,6 @@ if (isset($_SESSION['tipo_usuario'])) {
                     </div>
                 </div>     
             <!--Modal de Líder-->             
-
-
-
-
-
     
 </body>
 </html>
