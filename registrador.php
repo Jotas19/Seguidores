@@ -160,6 +160,18 @@ if (isset($_SESSION['tipo_usuario'])) {
               </div>
             </div>
           </div>
+
+
+          <div class="col-4 mb-4 ampliacion-elemento">
+            <div class="card">
+              <img src="src/card6_registrador.jpeg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">5. Votantes</h5>
+                <p class="card-text">Bienvenido al módulo de gestión de lugares. Aquí puedes administrar los lugares disponibles para las votaciones. Puedes agregar nuevos lugares, editar información existente o eliminar lugares.</p>
+                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLugarModal">Ver más</button>
+              </div>
+            </div>
+          </div>  
           
               
 

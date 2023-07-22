@@ -2,14 +2,14 @@
 session_start();
 
 // Verificar si el usuario ha iniciado sesión y el tipo de usuario
-if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administrador' || $_SESSION['tipo_usuario'] === 'registrador')) {
+if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administrador')) {
     // Página exclusiva para el administrador y el registrador
     
     // Aquí va el contenido específico para el administrador
     
 } else {
   // Redirigir a la página correspondiente
-  header("Location: visualizador.php");
+  header("Location: login.php");
   exit();
 }
 ?>

@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Verifica si la variable tipo_usuario no está definida o es diferente de 0
+if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 0) {
+    // Asigna el valor 0 a la variable tipo_usuario
+    $_SESSION['tipo_usuario'] = 0;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
