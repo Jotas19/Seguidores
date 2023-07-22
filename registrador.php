@@ -161,7 +161,6 @@ if (isset($_SESSION['tipo_usuario'])) {
             </div>
           </div>
 
-
           <div class="col-4 mb-4 ampliacion-elemento">
             <div class="card">
               <img src="src/card6_registrador.jpeg" class="card-img-top" alt="...">
@@ -180,46 +179,66 @@ if (isset($_SESSION['tipo_usuario'])) {
 
       <!--Modales-->
       <!--Modal del Lugar-->
-        <div class="modal fade" data-bs-backdrop="static" data-bs-backdrop="static" id="crearLugarModal" tabindex="-1" aria-labelledby="crearLugarModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+      <div class="modal fade" data-bs-backdrop="static" id="crearLugarModal" tabindex="-1" aria-labelledby="crearLugarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="crearLugarModalLabel">Crear Lugar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <form>
+            </div>
+            <div class="modal-body">
+                <form action="registrar_lugar.php" method="POST">
+                    <div class="mb-3">
+                        <label for="inputLugarVotante" class="form-label">Lugar Votante</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputLugarVotante" name="inputLugarVotante">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputDireccionLugar" class="form-label">Dirección del Lugar</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputDireccionLugar" name="inputDireccionLugar">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputCantidadMesas" class="form-label">Cantidad de Mesas</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputCantidadMesas" name="inputCantidadMesas">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputComunaFK" class="form-label">Comuna FK</label>
+                        <select class="form-control" id="inputComunaFK" name="inputComunaFK">
+                            <?php
+                            // Conectar a la base de datos (asegúrate de tener los datos correctos)
+                            $servername = "localhost";
+                            $username = "root";
+                            $password = "";
+                            $dbname = "seguidores";
 
-                    <div class="mb-3">
-                    <label for="inputLugar" class="form-label">Lugar</label>
-                    <input type="text" autocomplete="off" class="form-control" id="inputLugar">
-                    </div>
+                            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                    <div class="mb-3">
-                    <label for="inputDireccion" class="form-label">Dirección del lugar</label>
-                    <input type="text" autocomplete="off" class="form-control" id="inputDireccion">
-                    </div>
-                    
-                    <div class="mb-3">
-                    <label for="inputMesas" class="form-label">Cantidad de Mesas</label>
-                    <input type="number" autocomplete="off" class="form-control" id="inputMesas">
-                    </div>
+                            // Verificar la conexión
+                            if ($conn->connect_error) {
+                                die("Error en la conexión: " . $conn->connect_error);
+                            }
 
-                    <div class="mb-3">
-                    <label for="inputComuna" class="form-label">Comuna</label>
-                    <select class="form-select" id="inputComuna">
-                        <option value="1">Comuna 1</option>
-                        <option value="2">Comuna 2</option>
-                        <!-- Otras opciones de comuna... -->
-                    </select>
+                            // Consulta SQL para obtener los nombres de las comunas
+                            $sql = "SELECT id_comuna, nombre_lugar FROM comuna";
+                            $result = $conn->query($sql);
+
+                            // Generar las opciones del select con los nombres de las comunas
+                            while ($row = $result->fetch_assoc()) {
+                                $idComuna = $row["id_comuna"];
+                                $nombreComuna = $row["nombre_lugar"];
+                                echo "<option value='$idComuna'>$nombreComuna</option>";
+                            }
+
+                            $conn->close();
+                            ?>
+                        </select>
                     </div>
-                    
                     <button type="submit" class="btn btn-orange">Crear</button>
                 </form>
-                </div>
-            </div>
             </div>
         </div>
+    </div>
+</div>
+
         <!--Modal del Lugar-->
                               
 
@@ -232,61 +251,97 @@ if (isset($_SESSION['tipo_usuario'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                        <label for="inputIdComuna" class="form-label">ID de Comuna</label>
-                        <input type="text" autocomplete="off" class="form-control" id="inputIdComuna">
-                        </div>
-                        <div class="mb-3">
-                        <label for="inputNombreLugarFK" class="form-label">Nombre del Lugar FK</label>
-                        <input type="text" autocomplete="off" class="form-control" id="inputNombreLugarFK">
-                        </div>
-                        <button type="submit" class="btn btn-orange">Crear</button>
-                    </form>
+                    <form method="POST"> <!-- Asegúrate de agregar method="POST" aquí -->
+    <div class="mb-3">
+        <label for="inputIdComuna" class="form-label">ID de Comuna</label>
+        <input type="text" autocomplete="off" class="form-control" id="inputIdComuna" name="inputIdComuna">
+    </div>
+    <div class="mb-3">
+        <label for="inputNombreLugarFK" class="form-label">Nombre del Lugar FK</label>
+        <input type="text" autocomplete="off" class="form-control" id="inputNombreLugarFK" name="inputNombreLugarFK">
+    </div>
+    <button type="submit" class="btn btn-orange">Crear</button>
+</form>
+
                     </div>
                 </div>
                 </div>
             </div>
+            <?php
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "seguidores";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    
+    if ($conn->connect_error) {
+        die("Error en la conexión: " . $conn->connect_error);
+    }
+
+   
+    $idComuna = $_POST["inputIdComuna"];
+    $nombreLugarFK = $_POST["inputNombreLugarFK"];
+
+   
+    $sql = "INSERT INTO comuna (id_comuna, nombre_lugar) 
+            VALUES ('$idComuna', '$nombreLugarFK')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo '<div class="alert alert-success" role="alert">La comuna ha sido creada exitosamente.</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Error al crear la comuna: ' . $conn->error . '</div>';
+    }
+
+    
+    $conn->close();
+}
+?>
             <!-- Modal de Comuna-->
 
             <!-- Modal de Coordinador-->
             <div class="modal fade" data-bs-backdrop="static" id="crearCoordinadorModal" tabindex="-1" aria-labelledby="crearCoordinadorModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="crearCoordinadorModalLabel">Crear Coordinador</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearCoordinadorModalLabel">Crear Coordinador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="registrar_coordinador.php" method="POST">
+
+                    <div class="mb-3">
+                        <label for="inputIdCoordinador" class="form-label">ID de Coordinador</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputIdCoordinador" name="inputIdCoordinador">
                     </div>
-                    <div class="modal-body">
-                      <form>
 
-                        <div class="mb-3">
-                          <label for="inputIdCoordinador" class="form-label">ID de Coordinador</label>
-                          <input type="text"  autocomplete="off" class="form-control" id="inputIdCoordinador">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
-                          <input type="text" autocomplete="off" class="form-control" id="inputNombreCoordinador">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputDireccionCoordinador" class="form-label">Dirección del Coordinador</label>
-                          <input type="text" autocomplete="off" class="form-control" id="inputDireccionCoordinador">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputTelefonoCoordinador" class="form-label">Teléfono del Coordinador</label>
-                          <input type="text" autocomplete="off" class="form-control" id="inputTelefonoCoordinador">
-                        </div>
-
-                        <button type="submit" class="btn btn-orange">Crear</button>
-
-                      </form>
+                    <div class="mb-3">
+                        <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputNombreCoordinador" name="inputNombreCoordinador">
                     </div>
-                  </div>
-                </div>
-              </div>
+
+                    <div class="mb-3">
+                        <label for="inputDireccionCoordinador" class="form-label">Dirección del Coordinador</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputDireccionCoordinador" name="inputDireccionCoordinador">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputTelefonoCoordinador" class="form-label">Teléfono del Coordinador</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputTelefonoCoordinador" name="inputTelefonoCoordinador">
+                    </div>
+
+                    <button type="submit" class="btn btn-orange">Crear</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
               <!-- Modal de Coordinador-->
 
               <!--Modal de Líder-->
@@ -298,31 +353,33 @@ if (isset($_SESSION['tipo_usuario'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                            <label for="inputIdLider" class="form-label">ID de Líder</label>
-                            <input type="text"  autocomplete="off" class="form-control" id="inputIdLider">
-                            </div>
+                        <form action="registrar_lider.php" method="POST">
+                        <div class="mb-3">
+    <label for="inputIdLider" class="form-label">ID de Líder</label>
+    <input type="text"  autocomplete="off" class="form-control" id="inputIdLider" name="inputIdLider">
+</div>
 
-                            <div class="mb-3">
-                            <label for="inputNombreLider" class="form-label">Nombre del Líder</label>
-                            <input type="text"  autocomplete="off" class="form-control" id="inputNombreLider">
-                            </div>
+<div class="mb-3">
+    <label for="inputNombreLider" class="form-label">Nombre del Líder</label>
+    <input type="text"  autocomplete="off" class="form-control" id="inputNombreLider" name="inputNombreLider">
+</div>
 
-                            <div class="mb-3">
-                            <label for="inputDireccionLider" class="form-label">Dirección del Líder</label>
-                            <input type="text" autocomplete="off" class="form-control" id="inputDireccionLider">
-                            </div>
+<div class="mb-3">
+    <label for="inputDireccionLider" class="form-label">Dirección del Líder</label>
+    <input type="text" autocomplete="off" class="form-control" id="inputDireccionLider" name="inputDireccionLider">
+</div>
 
-                            <div class="mb-3">
-                            <label for="inputTelefonoLider" class="form-label">Teléfono del Líder</label>
-                            <input type="text" autocomplete="off" class="form-control" id="inputTelefonoLider">
-                            </div>
+<div class="mb-3">
+    <label for="inputTelefonoLider" class="form-label">Teléfono del Líder</label>
+    <input type="text" autocomplete="off" class="form-control" id="inputTelefonoLider" name="inputTelefonoLider">
+</div>
 
-                            <div class="mb-3">
-                            <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
-                            <input type="text"  autocomplete="off" class="form-control" id="inputNombreCoordinador">
-                            </div>
+<div class="mb-3">
+    <label for="inputNombreCoordinador" class="form-label">Nombre del Coordinador</label>
+    <input type="text"  autocomplete="off" class="form-control" id="inputNombreCoordinador" name="inputNombreCoordinador">
+</div>
+
+
 
                             <button type="submit" class="btn btn-orange">Crear</button>
                         </form>
@@ -330,7 +387,13 @@ if (isset($_SESSION['tipo_usuario'])) {
                     </div>
                     </div>
                 </div>     
-            <!--Modal de Líder-->             
+        
+ <!--Modal de Líder-->             
+
+
+
+
+
     
 </body>
 </html>
