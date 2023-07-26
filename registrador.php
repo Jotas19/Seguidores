@@ -167,7 +167,7 @@ if (isset($_SESSION['tipo_usuario'])) {
               <div class="card-body">
                 <h5 class="card-title">5. Votantes</h5>
                 <p class="card-text">Bienvenido al módulo de gestión de lugares. Aquí puedes administrar los lugares disponibles para las votaciones. Puedes agregar nuevos lugares, editar información existente o eliminar lugares.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearLugarModal">Ver más</button>
+                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#crearVotanteModal">Ver más</button>
               </div>
             </div>
           </div>  
@@ -390,6 +390,95 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
  <!--Modal de Líder-->             
 
+<!-- Modal de Votante -->
+<div class="modal fade" data-bs-backdrop="static" id="crearVotanteModal" tabindex="-1" aria-labelledby="crearVotanteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearVotanteModalLabel">Registrar Votante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="registrar_votante.php" method="POST">
+                    <div class="mb-3">
+                        <label for="inputIdVotante" class="form-label">ID de Votante</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputIdVotante" name="inputIdVotante">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputNombreVotante" class="form-label">Nombre del Votante</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputNombreVotante" name="inputNombreVotante">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputDireccionCasaVotante" class="form-label">Dirección del Votante</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputDireccionCasaVotante" name="inputDireccionCasaVotante">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputNombreLider" class="form-label">Nombre del Líder</label>
+                        <select class="form-select" id="inputNombreLider" name="inputNombreLider">
+                            <?php
+                            $servername = "localhost";
+                            $username = "root";
+                            $password = "";
+                            $dbname = "seguidores";
+
+                            $conn = new mysqli($servername, $username, $password, $dbname);
+
+                            if ($conn->connect_error) {
+                                die("Error en la conexión: " . $conn->connect_error);
+                            }
+
+                            $sql = "SELECT nombre_lider FROM lider";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . $row['nombre_lider'] . '">' . $row['nombre_lider'] . '</option>';
+                                }
+                            }
+
+                            $conn->close();
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputLugarVotante" class="form-label">Lugar del Votante</label>
+                        <select class="form-select" id="inputLugarVotante" name="inputLugarVotante">
+                            <?php
+                            $servername = "localhost";
+                            $username = "root";
+                            $password = "";
+                            $dbname = "seguidores";
+
+                            $conn = new mysqli($servername, $username, $password, $dbname);
+
+                            if ($conn->connect_error) {
+                                die("Error en la conexión: " . $conn->connect_error);
+                            }
+
+                            $sql = "SELECT lugar_votante FROM lugar";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . $row['lugar_votante'] . '">' . $row['lugar_votante'] . '</option>';
+                                }
+                            }
+
+                            $conn->close();
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputMesa" class="form-label">Mesa</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputMesa" name="inputMesa">
+                    </div>
+                    <button type="submit" class="btn btn-orange">Crear</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -397,3 +486,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
 </body>
 </html>
+
