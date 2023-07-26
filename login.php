@@ -1,4 +1,6 @@
 <?php
+
+
 session_start();
 
 // Verifica si la variable tipo_usuario no está definida o es diferente de 0

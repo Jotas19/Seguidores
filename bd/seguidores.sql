@@ -60,6 +60,6 @@ CREATE TABLE Votantes (
     mesa VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_votante),
     FOREIGN KEY (nombre_lider) REFERENCES Lider(nombre_lider),
-    FOREIGN KEY (lugar_votante) REFERENCES Lugar(lugar_votante),
+    FOREIGN KEY (lugar_votante) REFERENCES Lugar(lugar_votante)
 );
 
