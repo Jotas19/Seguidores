@@ -19,6 +19,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 <!DOCTYPE html>
 <html lang="es">
 <script src="js/script.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link href="css/style.css" rel="stylesheet">
 <link href="src/bootstrap-icons-1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -156,14 +157,30 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 
       <!-- Modal CRUD-->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-            <div class="modal-dialog">
+            <div class="modal-dialog moda-xl">
             <div class="modal-content">
                 <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                ...
+                  <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="#">Coordinador</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Líder</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Comuna</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Lugar</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Votantes</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -242,6 +259,27 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                   $conexion = mysqli_connect("localhost", "root", "", "seguidores");
                                   $SQL = "SELECT * FROM registro";
                                   $dato = mysqli_query($conexion, $SQL);
+                                  $tabla = "registro";
+                                  header("Location: editar.php?tabla=" . urlencode($tabla));
+                                  $usuario = $fila['usuario'];
+                                  header("Location: editar.php?usuario=" . urlencode($usuario));
+                                  $accion = '';
+
+                                  // Verificar si se ha enviado el formulario
+
+                                  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                    // Verificar si se presionó el botón "Editar"
+                                    if (isset($_POST["editar"])) {
+                                        $accion = "editar_registro";
+                                    } elseif (isset($_POST["eliminar"])) {
+                                        // Verificar si se presionó el botón "Eliminar"
+                                        $accion = "eliminar_registro";
+                                    } else {
+                                        // Si no se presionó ninguno de los botones, mostrar un mensaje de error
+                                        echo "Error: Ningún botón presionado.";
+                                    }
+                                  }
+                                  
 
                                   if($dato->num_rows > 0)
                                   {
@@ -256,6 +294,23 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                       <td><?php echo $fila['nombre']; ?></td>
                                       <td><?php echo $fila['usuario']; ?></td>
                                       <td><?php echo $fila['contraseña']; ?></td>
+
+                                      <td>
+                                      
+                                      <form method="post" action="">
+                                          
+                                          <button type="submit" name="editar" class="btn btn-warning" href="editar.php">
+                                              <i class="bi bi-pencil-fill"></i> Editar
+                                          </button>
+
+                                          
+                                          <button type="submit" name="eliminar" class="btn btn-danger" href="eliminar.php">
+                                              <i class="bi bi-trash-fill"></i> Eliminar
+                                          </button>
+                                      </form>
+
+                                      </td>
+
                                     </tr>
                                       <?php
                                     }
