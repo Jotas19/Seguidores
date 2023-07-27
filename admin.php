@@ -267,18 +267,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 
                                   // Verificar si se ha enviado el formulario
 
-                                  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                                    // Verificar si se presionó el botón "Editar"
-                                    if (isset($_POST["editar"])) {
-                                        $accion = "editar_registro";
-                                    } elseif (isset($_POST["eliminar"])) {
-                                        // Verificar si se presionó el botón "Eliminar"
-                                        $accion = "eliminar_registro";
-                                    } else {
-                                        // Si no se presionó ninguno de los botones, mostrar un mensaje de error
-                                        echo "Error: Ningún botón presionado.";
-                                    }
-                                  }
+                                  
                                   
 
                                   if($dato->num_rows > 0)
