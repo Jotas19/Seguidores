@@ -127,7 +127,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
               <div class="card-body">
                 <h5 class="card-title">Visualiza y filtra los datos.</h5>
                 <p class="card-text">En esta pestaña, puedes visualizar y filtrar los datos almacenados en la base de datos de manera eficiente. Estas opciones te brindan la flexibilidad necesaria para visualizar y analizar los datos de forma eficaz.</p>
-                <a href="#" class="btn btn-orange">Ver más</a>
+                <a href="visualizador.php" class="btn btn-orange">Ver más</a>
               </div>
             </div>
           </div>
@@ -259,11 +259,12 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                   $conexion = mysqli_connect("localhost", "root", "", "seguidores");
                                   $SQL = "SELECT * FROM registro";
                                   $dato = mysqli_query($conexion, $SQL);
+
                                   $tabla = "registro";
                                   header("Location: editar.php?tabla=" . urlencode($tabla));
                                   $usuario = $fila['usuario'];
                                   header("Location: editar.php?usuario=" . urlencode($usuario));
-                                  $accion = '';
+                                  $accion = 'editar_registro';
 
                                   // Verificar si se ha enviado el formulario
 
@@ -283,19 +284,23 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                       <td><?php echo $fila['nombre']; ?></td>
                                       <td><?php echo $fila['usuario']; ?></td>
                                       <td><?php echo $fila['contraseña']; ?></td>
-
                                       <td>
                                       
                                       <form method="post" action="">
-                                          
-                                          <button type="submit" name="editar" class="btn btn-warning" href="editar.php">
-                                              <i class="bi bi-pencil-fill"></i> Editar
-                                          </button>
+
+   
+                                      <a class="btn btn-warning" href="editar.php?accion=<?php echo $accion;?>&tabla=<?php echo $tabla;?>&usuario=<?php echo $fila['nombre'];?>">
+                                      <i class="bi bi-pencil-fill"></i> Editar
+                                      
+                                      
+
+                                      <a class="btn btn-warning" href="editar.php?accion=<?php echo $accion;?>&tabla=<?php echo $tabla;?>&usuario=<?php echo $fila['nombre'];?>">
+                                      <i class="bi bi-trash-fill"></i> Eliminar
 
                                           
-                                          <button type="submit" name="eliminar" class="btn btn-danger" href="eliminar.php">
-                                              <i class="bi bi-trash-fill"></i> Eliminar
-                                          </button>
+                                          
+                                              
+                                          
                                       </form>
 
                                       </td>
@@ -323,9 +328,12 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                     <div class="modal-body">
                         
         
-                        <!-- Botón para abrir el modal -->
+                        
 
                         <!-- Modal -->
+
+                        <!--Submodales dentro de los modales-->
+                        
                         
                         </div>
                     </div>
