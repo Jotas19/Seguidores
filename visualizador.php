@@ -20,38 +20,61 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
 
         return $conn;
     }
+
     // Obtener la conexión a la base de datos
     $conn = getDatabaseConnection();
 
-    // Procesar el filtrado de resultados si se envió el formulario
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // Obtener los valores del filtro
+    // Procesar el filtrado de resultados si se envió el formulario para "Lugar"
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["lugarSubmit"])) {
+        // Obtener los valores del filtro de "Lugar"
         $lugarVotante = $_POST["lugarVotanteSelect"];
         $direccion = $_POST["direccionSelect"];
         $cantidadMesas = $_POST["cantidadMesasSelect"];
         $comuna = $_POST["comunaSelect"];
 
-        // Construir consulta SQL con filtros
-        $sql = "SELECT * FROM lugar WHERE 1=1";
+        // Construir consulta SQL con filtros para "Lugar"
+        $sqlLugar = "SELECT * FROM lugar WHERE 1=1";
 
         if ($lugarVotante !== "") {
-            $sql .= " AND lugar_votante = '$lugarVotante'";
+            $sqlLugar .= " AND lugar_votante = '$lugarVotante'";
         }
 
         if ($direccion !== "") {
-            $sql .= " AND direccion_lugar = '$direccion'";
+            $sqlLugar .= " AND direccion_lugar = '$direccion'";
         }
 
         if ($cantidadMesas !== "") {
-            $sql .= " AND cantidad_mesas = '$cantidadMesas'";
+            $sqlLugar .= " AND cantidad_mesas = '$cantidadMesas'";
         }
 
         if ($comuna !== "") {
-            $sql .= " AND comuna = '$comuna'";
+            $sqlLugar .= " AND comuna = '$comuna'";
         }
 
-        $result = $conn->query($sql);
+        $resultLugar = $conn->query($sqlLugar);
     }
+
+    // Procesar el filtrado de resultados si se envió el formulario para "Comuna"
+// Procesar el filtrado de resultados si se envió el formulario para "Comuna"
+// Procesar el filtrado de resultados si se envió el formulario para "Comuna"
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
+    // Obtener los valores del filtro de "Comuna"
+    $nombreLugarFk = $_POST["nombreLugarFkSelect"];
+    $id_comuna = $_POST["idcomuna"];
+
+    // Construir consulta SQL con filtros para "Comuna"
+    $sqlComuna = "SELECT * FROM comuna WHERE 1=1";
+
+    if ($id_comuna !== "") {
+        $sqlComuna .= " AND id_comuna = '$id_comuna'";
+    }
+    if ($nombreLugarFk !== "") {
+        $sqlComuna .= " AND nombre_lugar = '$nombreLugarFk'";
+    }
+
+    $resultComuna = $conn->query($sqlComuna);
+}
+
 
 } else {
     // Redirigir a la página de inicio de sesión si no está autenticado
@@ -59,6 +82,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -185,9 +209,6 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
             <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#lugar_tab">Lugar</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="tab2" data-bs-toggle="tab" href="#mesa_tab">Mesa</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" id="tab3" data-bs-toggle="tab" href="#comuna_tab">Comuna</a>
           </li>
           <li class="nav-item">
@@ -229,7 +250,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
         <div class="mb-3">
             <label for="direccionSelect" class="form-label">Dirección del Lugar</label>
             <select class="form-select" id="direccionSelect" name="direccionSelect">
-                <option value="">Seleccionar</option>
+                <option value="">Todos</option>
                 <?php
                 $sql = "SELECT DISTINCT direccion_lugar FROM Lugar";
                 $result = $conn->query($sql);
@@ -242,7 +263,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
         <div class="mb-3">
             <label for="cantidadMesasSelect" class="form-label">Cantidad de Mesas</label>
             <select class="form-select" id="cantidadMesasSelect" name="cantidadMesasSelect">
-                <option value="">Seleccionar</option>
+                <option value="">Todos</option>
                 <?php
                 $sql = "SELECT DISTINCT cantidad_mesas FROM Lugar";
                 $result = $conn->query($sql);
@@ -255,7 +276,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
         <div class="mb-3">
             <label for="comunaSelect" class="form-label">Comuna</label>
             <select class="form-select" id="comunaSelect" name="comunaSelect">
-                <option value="">Seleccionar</option>
+                <option value="">Todos</option>
                 <?php
                 $sql = "SELECT DISTINCT comuna FROM Lugar";
                 $result = $conn->query($sql);
@@ -265,7 +286,8 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
                 ?>
             </select>
         </div>
-        <button type="submit" class="btn btn-orange">Filtrar</button>
+        <button type="submit" class="btn btn-orange" name="lugarSubmit">Filtrar</button>
+
         </div>
                 </div>
             </div>
@@ -291,13 +313,29 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
                                 
                                 // Obtener los valores del filtro si se ha enviado el formulario
                                 $nombreVotante = isset($_POST['lugarVotanteSelect']) ? $_POST['lugarVotanteSelect'] : '';
-                                
+                                $direccionLugar = isset($_POST['direccionSelect']) ? $_POST['direccionSelect'] : '';
+                                $cantidadMesas = isset($_POST['cantidadMesasSelect']) ? $_POST['cantidadMesasSelect'] : '';
+                                $comuna = isset($_POST['comunaSelect']) ? $_POST['comunaSelect'] : '';
+
                                 // Construir consulta SQL con filtros
                                 $SQL = "SELECT * FROM lugar WHERE 1=1";
 
-                                if ($nombreVotante !== "") {
+                                if ($nombreVotante !== '') {
                                     $SQL .= " AND lugar_votante = '$nombreVotante'";
                                 }
+                                
+                                if ($direccionLugar !== '') {
+                                    $SQL .= " AND direccion_lugar = '$direccionLugar'";
+                                }
+                                
+                                if ($cantidadMesas !== '') {
+                                    $SQL .= " AND cantidad_mesas = '$cantidadMesas'";
+                                }
+                                
+                                if ($comuna !== '') {
+                                    $SQL .= " AND comuna = '$comuna'";
+                                }
+
 
                     // Configuración de la paginación
                     $resultadosPorPagina = 10; // Número de resultados por página
@@ -372,7 +410,164 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
         </div>
     </div>
 </form>
-    <!-- ... Otros contenidos de la página ... -->
+    </div>
+     <!-- ...  contenidos de la Seccion Comuna ... -->
 
+          <div class="tab-pane fade" id="comuna_tab">
+            <h4>Comuna</h4>
+            <p>Conozca toda la información relacionada al Comuna</p>
+
+            <div class="container mt-4">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Filtrar Comuna</h5>
+
+
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="idcomuna" class="form-label">ID de la Comuna</label>
+                                <select class="form-select" id="idcomuna" name="idcomuna">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT id_comuna FROM comuna";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['id_comuna'] . '">' . $row['id_comuna'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nombreLugarFkSelect" class="form-label">Nombre de la comuna</label>
+                                <select class="form-select" id="nombreLugarFkSelect" name="nombreLugarFkSelect">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_lugar FROM comuna";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_lugar'] . '">' . $row['nombre_lugar'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-orange" name="comunaSubmit">Filtrar</button>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+<!-- Mostrar resultados -->
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Resultado de la Vista y Filtro</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID de Comuna</th>
+                        <th>Nombre de la comuna</th>
+                    </tr>
+                </thead>
+                
+                    <?php
+                    $conexion = mysqli_connect("localhost", "root", "", "seguidores");
+
+                    // Obtener los valores del filtro si se ha enviado el formulario
+                    $id_comuna = isset($_POST['comunaSelect']) ? $_POST['comunaSelect'] : '';
+                    $nombreLugarFk = isset($_POST['nombreLugarFkSelect']) ? $_POST['nombreLugarFkSelect'] : '';
+
+                    // Construir consulta SQL con filtros
+                    $SQL = "SELECT * FROM Comuna WHERE 1=1";
+
+                    if ($id_comuna !== '') {
+                        $SQL .= " AND id_comuna = '$id_comuna'";
+                    }
+
+                    if ($nombreLugarFk !== '') {
+                        $SQL .= " AND nombre_lugar = '$nombreLugarFk'";
+                    }
+
+
+                      // Configuración de la paginación
+                    $resultadosPorPagina = 10; // Número de resultados por página
+                    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // Página actual (por defecto la primera)
+                    $inicio = ($paginaActual - 1) * $resultadosPorPagina; // Registro de inicio para la consulta
+
+                    $totalResultados = mysqli_num_rows(mysqli_query($conexion, $SQL)); // Total de resultados
+                    $totalPaginas = ceil($totalResultados / $resultadosPorPagina); // Total de páginas
+
+                    // Agregar el límite de resultados para la paginación
+                    $SQL .= " LIMIT $inicio, $resultadosPorPagina";
+
+                    $dato = mysqli_query($conexion, $SQL);
+                    ?>
+                    <tbody>
+                    <?php
+                    if ($resultComuna->num_rows > 0) {
+                        while ($fila = $resultComuna->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $fila['id_comuna'] . "</td>";
+                            echo "<td>" . $fila['nombre_lugar'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='2'>No se encontraron resultados</td></tr>";
+                    }
+
+                    mysqli_close($conexion);
+                    ?>
+                </tbody>
+</table>
+</div>
+<div class="card-footer">
+    <div class="d-flex justify-content-end">
+        <nav aria-label="Selector de Páginas">
+            <ul class="pagination">
+                                          <?php if ($paginaActual > 1) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } ?>
+  
+                                          <?php for ($i = 1; $i <= $totalPaginas; $i++) { ?>
+                                              <?php if ($i == $paginaActual) { ?>
+                                                  <li class="page-item active" aria-current="page">
+                                                      <a class="page-link" href="#"><?php echo $i; ?> <span class="visually-hidden">(Página actual)</span></a>
+                                                  </li>
+                                              <?php } else { ?>
+                                                  <li class="page-item"><a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                              <?php } ?>
+                                          <?php } ?>
+  
+                                          <?php if ($paginaActual < $totalPaginas) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>">Siguiente</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguiente</a>
+                                              </li>
+                                          <?php } ?>
+                                          </ul>
+        </nav>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+
+           <!-- ... Otros contenidos de la página ... -->
 </body>
 </html>
