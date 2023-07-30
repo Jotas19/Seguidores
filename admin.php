@@ -24,6 +24,8 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 <link href="src/bootstrap-icons-1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -207,6 +209,13 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                           <li class="nav-item">
                             <a class="nav-link" id="tab2" data-bs-toggle="tab" href="#content2">Ver Usuario</a>
                           </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="tab3" data-bs-toggle="tab" href="#content3">Editar Usuario</a>
+                          </li>
+                          
+
+                          
+
                           
                         </ul>
                         <div class="tab-content mt-2">
@@ -240,8 +249,8 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                 <button type="submit" class="btn btn-orange" name="registrar">Crear Usuario</button>
                             </form>
                           </div>
-                          <div class="tab-pane fade" id="content2">
-                            
+
+                          <div class="tab-pane fade" id="content2">  
                             <div class="table-responsive">
                                 <table class="table">
                                   <thead>
@@ -265,54 +274,169 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                                   $usuario = $fila['usuario'];
                                   header("Location: editar.php?usuario=" . urlencode($usuario));
                                   $accion = 'editar_registro';
+                                  $contador = 0;
 
                                   // Verificar si se ha enviado el formulario
 
-                                  
-                                  
-
+                      
                                   if($dato->num_rows > 0)
                                   {
+                                    
                                     while($fila = mysqli_fetch_array($dato))
                                     {
+                                      $contador++;
                                       // Aquí puedes realizar alguna operación con los datos obtenidos de la consulta
                                       // Por ejemplo, puedes acceder a los valores de las columnas usando $fila['nombre_columna']
                                       // Ejemplo: $nombre = $fila['nombre'];
                                       ?>
                                       <tr>
-                                      <td><?php echo $fila['tipo_usuario']; ?></td>
+                                      <td><?php echo $fila['tipo_usuario'];?></td>
                                       <td><?php echo $fila['nombre']; ?></td>
                                       <td><?php echo $fila['usuario']; ?></td>
                                       <td><?php echo $fila['contraseña']; ?></td>
                                       <td>
                                       
+                                      
+
                                       <form method="post" action="">
-
-   
-                                      <a class="btn btn-warning" href="editar.php?accion=<?php echo $accion;?>&tabla=<?php echo $tabla;?>&usuario=<?php echo $fila['nombre'];?>">
-                                      <i class="bi bi-pencil-fill"></i> Editar
+                                          <input type="hidden" name="posicion" value="<?php echo $contador; ?>">
+                                          <button id="boton_chido_link" type="submit" class="btn btn-info" name="mostrarPosicion" onclick="">Mostrar Posición</button>                                   
+                                      </form>
+                                          
                                       
-                                      
+                                      <script>
+                                          $(document).ready(function () {
+                                              // Agregar evento de envío del formulario mediante AJAX
+                                              $("#miFormulario").submit(function (event) {
+                                                  event.preventDefault(); // Evitar el envío normal del formulario
 
-                                      <a class="btn btn-warning" href="editar.php?accion=<?php echo $accion;?>&tabla=<?php echo $tabla;?>&usuario=<?php echo $fila['nombre'];?>">
-                                      <i class="bi bi-trash-fill"></i> Eliminar
+                                                  // Obtener la posición desde el formulario
+                                                  var posicion = $(this).find('input[name="posicion"]').val();
 
-                                          
-                                          
-                                              
-                                          
+                                                  // Realizar la llamada AJAX para enviar los datos al servidor
+                                                  $.ajax({
+                                                      type: "POST",
+                                                      url: "Seguidores/admin.php",
+                                                      data: { mostrarPosicion: true, posicion: posicion },
+                                                      success: function (data) {
+                                                          // La solicitud AJAX fue exitosa, aquí puedes realizar acciones adicionales si lo necesitas
+                                                          // Por ejemplo, mostrar el modal y seleccionar el tab pane
+                                                          mostrarAlerta();
+                                                      },
+                                                      error: function () {
+                                                          // La solicitud AJAX falló, aquí puedes manejar el error si lo deseas
+                                                      }
+                                                  });
+                                              });
+
+                                              // Función que muestra el modal y selecciona el tab pane
+                                              function mostrarAlerta() {
+                                                  var modal = document.getElementById("manejo_usuarios_modal");
+                                                  var tabPane = document.getElementById("content3");
+                                                  var myModal = new bootstrap.Modal(modal);
+                                                  myModal.show();
+                                                  var tab = new bootstrap.Tab(tabPane);
+                                                  tab.show();
+                                              }
+                                          });
+                                      </script>
+                                                                              
+            
                                       </form>
 
                                       </td>
 
                                     </tr>
+
+
+
                                       <?php
+                                      
                                     }
                                   }
+                                  
+                                  $conexion = mysqli_connect("localhost", "root", "", "seguidores");
+                                  $SQL = "SELECT * FROM registro";
+                                  $dato = mysqli_query($conexion, $SQL);
+
+                                  $posicion = isset($_POST['mostrarPosicion']) ? $_POST['posicion'] : null;
+
+                                  if (isset($_POST['mostrarPosicion']) && !empty($posicion)) {
+                                    echo "La posición del registro es: " . $posicion;
+                                    
+                                    // Verificamos si hay datos en la consulta
+                                    if ($dato && mysqli_num_rows($dato) > 0) {
+                                        // Reiniciamos el puntero de la consulta al principio
+                                        mysqli_data_seek($dato, 0);
+                                        
+                                        // Iteramos sobre los resultados
+                                        while ($fila = mysqli_fetch_array($dato)) {
+                                            if ($posicion == 1) { // En la primera iteración, encontramos el resultado deseado
+                                                $tipo_usuario_encontrado = $fila['tipo_usuario'];
+                                                $nombre_encontrado = $fila['nombre']; 
+                                                $usuario_encontrado = $fila['usuario']; 
+                                                $contraseña_encontrado = $fila['contraseña'];
+                                                
+                                                // Puedes detener el bucle si ya encontraste el resultado deseado
+                                                break;
+                                            }
+                                            $posicion--; // Decrementamos la posición para continuar buscando
+                                        }
+                                
+                                        if (isset($tipo_usuario_encontrado)) {
+                                            // Ahora puedes utilizar los valores encontrados según tus necesidades
+                                            echo "Tipo de Usuario: " . $tipo_usuario_encontrado . "<br>";
+                                            echo "Nombre: " . $nombre_encontrado . "<br>";
+                                            echo "Usuario: " . $usuario_encontrado . "<br>";
+                                            echo "Contraseña: " . $contraseña_encontrado . "<br>";
+                                        } else {
+                                            echo "No se encontró ningún resultado en la posición especificada.";
+                                        }
+                                    } else {
+                                        echo "No se encontraron resultados.";
+                                    }
+                                } else {
+                                    echo "No se especificó una posición válida.";
+                                }
+                                    
+                                  
+
 
                                   // Recuerda cerrar la conexión a la base de datos al finalizar
                                   mysqli_close($conexion);
                                   ?>
+                                  
+                                  <!-- Agregar este código para mostrar el modal al recargar la página -->
+                                  <script>
+                                  // Función para abrir el modal
+                                  function abrirModal() {
+                                      const modal = document.getElementById("manejo_usuario_modal");
+                                      modal.style.display = "block";
+                                  }
+
+                                  // Función para guardar el estado del botón en una cookie
+                                  function guardarEstado() {
+                                      document.cookie = "botonPulsado=true";
+                                  }
+
+                                  // Función para obtener el valor de una cookie por su nombre
+                                  function getCookie(name) {
+                                      const value = "; " + document.cookie;
+                                      const parts = value.split("; " + name + "=");
+                                      if (parts.length === 2) return parts.pop().split(";").shift();
+                                  }
+
+                                  // Comprobar si el botón fue pulsado anteriormente
+                                  window.addEventListener("load", function () {
+                                      const botonPulsado = getCookie("botonPulsado");
+                                      if (botonPulsado === "true") {
+                                          // Abrir el modal si el botón fue pulsado antes de la recarga
+                                          abrirModal();
+                                          // Eliminar la cookie para que no vuelva a abrirse en futuras recargas
+                                          document.cookie = "botonPulsado=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                      }
+                                  });
+                                  </script>  
 
 
                                   </tbody>
@@ -322,6 +446,44 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 
 
                           </div>
+
+                          <div class="tab-pane fade" id="content3">
+                          <!-- Formulario para editar el usuario -->
+                          <form action="editar.php" id="editUserForm" method="post">
+                              <!-- Agregar campos ocultos para enviar datos adicionales -->
+                              <input type="hidden" name="accion" value="<?php echo $accion; ?>">
+                              <input type="hidden" name="tabla" value="<?php echo $tabla; ?>">
+                              <input type="hidden" name="usuario" value="<?php echo $fila['usuario']; ?>">
+
+                              <!-- Resto del formulario -->
+                              <div class="mb-3">
+                                  <label for="userType" class="form-label">Tipo de Usuario:</label>
+                                  <select class="form-select" id="userType" name="tipo_usuario">
+                                      <option value="administrador" <?php if ($tipo_usuario_encontrado === 'administrador') echo 'selected'; ?>>Administrador</option>
+                                      <option value="visualizador" <?php if ($tipo_usuario_encontrado === 'visualizador') echo 'selected'; ?>>Visualizador</option>
+                                      <option value="registrador" <?php if ($tipo_usuario_encontrado === 'registrador') echo 'selected'; ?>>Registrador</option>
+                                  </select>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="username" class="form-label">Nombre</label>
+                                  <input type="text" autocomplete="off" class="form-control" id="nombre" name="nombre" value="<?php echo $nombre_encontrado; ?>">
+                              </div>
+                              <div class="mb-3">
+                                  <label for="username" class="form-label">Usuario:</label>
+                                  <input type="text" autocomplete="off" class="form-control" id="usuario" name="usuario" value="<?php echo $usuario_encontrado; ?>">
+                              </div>
+                              <div class="mb-3">
+                                  <label for="password" class="form-label">Contraseña:</label>
+                                  <input type="password" class="form-control" id="contraseña" name="contraseña" value="<?php echo $contraseña_encontrado; ?>">
+                              </div>
+                              <div class="mb-3">
+                                  <label for="confirmPassword" class="form-label">Confirmar Contraseña:</label>
+                                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" value="<?php echo $contraseña_encontrado; ?>">
+                              </div>
+                              <button type="submit" class="btn btn-orange" name="editar">Editar</button>
+                          </form>
+
+                          </div> 
                           
                         </div>
                       </div>
