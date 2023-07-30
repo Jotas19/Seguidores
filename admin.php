@@ -300,7 +300,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 
                                       <form method="post" action="">
                                           <input type="hidden" name="posicion" value="<?php echo $contador; ?>">
-                                          <button id="boton_chido_link" type="submit" class="btn btn-info" name="mostrarPosicion" onclick="">Mostrar Posición</button>                                   
+                                          <button id="boton_chido_link" type="submit" class="btn btn-warning" name="mostrarPosicion" onclick="">Editar</button>                                   
                                       </form>
                                           
                                       
