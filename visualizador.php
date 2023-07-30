@@ -54,8 +54,6 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'visualiz
         $resultLugar = $conn->query($sqlLugar);
     }
 
-    // Procesar el filtrado de resultados si se envió el formulario para "Comuna"
-// Procesar el filtrado de resultados si se envió el formulario para "Comuna"
 // Procesar el filtrado de resultados si se envió el formulario para "Comuna"
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
     // Obtener los valores del filtro de "Comuna"
@@ -75,6 +73,96 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
     $resultComuna = $conn->query($sqlComuna);
 }
 
+// Procesar el filtrado de resultados si se envió el formulario para "Coordinador"
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["coordinadorSubmit"])) {
+
+    $id_cordinador = $_POST["idCoordinador"];
+    $nombre_cordinador = $_POST["nombreCoordinador"];
+    $direccion_cordinador = $_POST["direccionCoordinador"];
+    $telefono_cordinador = $_POST["telefonoCoordinador"];
+
+
+    $sqlCordinador = "SELECT * FROM cordinador WHERE 1=1";
+
+    if ($id_cordinador !== "") {
+        $sqlCordinador .= " AND id_cordinador = '$id_cordinador'";
+    }
+    if ($nombre_cordinador !== "") {
+        $sqlCordinador .= " AND nombre_cordinador = '$nombre_cordinador'";
+    }
+    if ($direccion_cordinador !== "") {
+        $sqlCordinador .= " AND direccion_cordinador = '$direccion_cordinador'";
+    }
+    if ($telefono_cordinador !== "") {
+        $sqlCordinador .= " AND telefono_cordinador = '$telefono_cordinador'";
+    }
+
+    $resultCordinador = $conn->query($sqlCordinador);
+}
+
+// Procesar el filtrado de resultados si se envió el formulario para "Líder"
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["liderSubmit"])) {
+
+    $id_lider = $_POST["idlider"];
+    $nombre_lider = $_POST["nombrelider"];
+    $direccion_lider = $_POST["direccionLider"];
+    $telefono_lider = $_POST["telefonoLider"];
+    $nombre_cordinador = $_POST["nombreCoordinadorLider"];
+
+    $sqlLider = "SELECT * FROM lider WHERE 1=1";
+
+    if ($id_lider !== "") {
+        $sqlLider .= " AND id_lider = '$id_lider'";
+    }
+    if ($nombre_lider !== "") {
+        $sqlLider .= " AND nombre_lider = '$nombre_lider'";
+    }
+    if ($direccion_lider !== "") {
+        $sqlLider .= " AND direccion_lider = '$direccion_lider'";
+    }
+    if ($telefono_lider !== "") {
+        $sqlLider .= " AND telefono_lider = '$telefono_lider'";
+    }
+    if ($nombre_cordinador !== "") {
+        $sqlLider .= " AND nombre_cordinador = '$nombre_cordinador'";
+    }
+
+    $resultLider = $conn->query($sqlLider);
+}
+
+// Procesar el filtrado de resultados si se envió el formulario para "votantes"
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
+
+    $id_votante = $_POST["idvotante"];
+    $nombre_votante = $_POST["nombrevotante"];
+    $direccion_casa_votante = $_POST["direccioncasavotante"];
+    $nombre_lider = $_POST["nombrelidervotante"];
+    $lugar_votante = $_POST["lugarvotante"];
+    $mesa = $_POST["mesavotante"];
+
+    $sqlvotantes = "SELECT * FROM votantes WHERE 1=1";
+
+    if ($id_votante !== "") {
+        $sqlvotantes .= " AND id_votante = '$id_votante'";
+    }
+    if ($nombre_votante !== "") {
+        $sqlvotantes .= " AND nombre_votante = '$nombre_votante'";
+    }
+    if ($direccion_casa_votante !== "") {
+        $sqlvotantes .= " AND direccion_casa_votante = '$direccion_casa_votante'";
+    }
+    if ($nombre_lider !== "") {
+        $sqlvotantes .= " AND nombre_lider = '$nombre_lider'";
+    }
+    if ($lugar_votante !== "") {
+        $sqlvotantes .= " AND lugar_votante = '$lugar_votante'";
+    }
+    if ($mesa !== "") {
+        $sqlvotantes .= " AND mesa = '$mesa'";
+    }
+
+    $resultvotantes = $conn->query($sqlvotantes);
+}
 
 } else {
     // Redirigir a la página de inicio de sesión si no está autenticado
@@ -411,6 +499,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
     </div>
 </form>
     </div>
+
      <!-- ...  contenidos de la Seccion Comuna ... -->
 
           <div class="tab-pane fade" id="comuna_tab">
@@ -478,7 +567,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
                     $conexion = mysqli_connect("localhost", "root", "", "seguidores");
 
                     // Obtener los valores del filtro si se ha enviado el formulario
-                    $id_comuna = isset($_POST['comunaSelect']) ? $_POST['comunaSelect'] : '';
+                    $id_comuna = isset($_POST['idcomuna']) ? $_POST['idcomuna'] : '';
                     $nombreLugarFk = isset($_POST['nombreLugarFkSelect']) ? $_POST['nombreLugarFkSelect'] : '';
 
                     // Construir consulta SQL con filtros
@@ -508,8 +597,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
                     ?>
                     <tbody>
                     <?php
-                    if ($resultComuna->num_rows > 0) {
-                        while ($fila = $resultComuna->fetch_assoc()) {
+                    if (mysqli_num_rows($dato) > 0) {
+                        while ($fila = mysqli_fetch_array($dato)) {
                             echo "<tr>";
                             echo "<td>" . $fila['id_comuna'] . "</td>";
                             echo "<td>" . $fila['nombre_lugar'] . "</td>";
@@ -567,7 +656,659 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comunaSubmit"])) {
 </div>
 </form>
 </div>
+ <!-- ...  contenidos de la Seccion Comuna ... -->
 
-           <!-- ... Otros contenidos de la página ... -->
+                                    <!-- ...  contenidos de la Seccion Coordinador ... -->
+                                    
+                                    <div class="tab-pane fade" id="coordinador_tab">
+            <h4>Coordinador</h4>
+            <p>Conozca toda la información relacionada al Coordinador</p>
+
+            <div class="container mt-4">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Filtrar Coordinador</h5>
+
+
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="idCoordinador" class="form-label">ID del Coordinador</label>
+                                <select class="form-select" id="idCoordinador" name="idCoordinador">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT id_cordinador FROM cordinador";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['id_cordinador'] . '">' . $row['id_cordinador'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="nombreCoordinador" class="form-label">Nombre del Coordinador</label>
+                                <select class="form-select" id="nombreCoordinador" name="nombreCoordinador">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_cordinador FROM cordinador";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_cordinador'] . '">' . $row['nombre_cordinador'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="direccionCoordinador" class="form-label">Direccion Coordinador</label>
+                                <select class="form-select" id="direccionCoordinador" name="direccionCoordinador">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT direccion_cordinador FROM cordinador";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['direccion_cordinador'] . '">' . $row['direccion_cordinador'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefonoCoordinador" class="form-label">Teléfono Coordinador</label>
+                                <select class="form-select" id="telefonoCoordinador" name="telefonoCoordinador">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT telefono_cordinador FROM cordinador";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['telefono_cordinador'] . '">' . $row['telefono_cordinador'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-orange" name="coordinadorSubmit">Filtrar</button>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+<!-- Mostrar resultados -->
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Resultado de la Vista y Filtro</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID del Coordinador</th>
+                        <th>Nombre del Coordinador</th>
+                        <th>Direccion del Coordinador</th>
+                        <th>Teléfono del Coordinador</th>
+                    </tr>
+                </thead>
+                
+                    <?php
+                    $conexion = mysqli_connect("localhost", "root", "", "seguidores");
+
+                    // Obtener los valores del filtro si se ha enviado el formulario
+                    $id_cordinador = isset($_POST['idCoordinador']) ? $_POST['idCoordinador'] : '';
+                    $nombre_cordinador = isset($_POST['nombreCoordinador']) ? $_POST['nombreCoordinador'] : '';
+                    $direccion_cordinador = isset($_POST['direccionCoordinador']) ? $_POST['direccionCoordinador'] : '';
+                    $telefono_cordinador = isset($_POST['telefonoCoordinador']) ? $_POST['telefonoCoordinador'] : '';
+
+                    // Construir consulta SQL con filtros
+                    $SQL = "SELECT * FROM cordinador WHERE 1=1";
+
+                    if ($id_cordinador !== "") {
+                        $SQL .= " AND id_cordinador = '$id_cordinador'";
+                    }
+                    if ($nombre_cordinador !== "") {
+                        $SQL .= " AND nombre_cordinador = '$nombre_cordinador'";
+                    }
+                    if ($direccion_cordinador !== "") {
+                        $SQL .= " AND direccion_cordinador = '$direccion_cordinador'";
+                    }
+                    if ($telefono_cordinador !== "") {
+                        $SQL .= " AND telefono_cordinador = '$telefono_cordinador'";
+                    }
+
+                      // Configuración de la paginación
+                    $resultadosPorPagina = 10; // Número de resultados por página
+                    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // Página actual (por defecto la primera)
+                    $inicio = ($paginaActual - 1) * $resultadosPorPagina; // Registro de inicio para la consulta
+
+                    $totalResultados = mysqli_num_rows(mysqli_query($conexion, $SQL)); // Total de resultados
+                    $totalPaginas = ceil($totalResultados / $resultadosPorPagina); // Total de páginas
+
+                    // Agregar el límite de resultados para la paginación
+                    $SQL .= " LIMIT $inicio, $resultadosPorPagina";
+
+                    $dato = mysqli_query($conexion, $SQL);
+                    ?>
+                    <tbody>
+                    <?php
+                    if (mysqli_num_rows($dato) > 0) {
+                        while ($fila = mysqli_fetch_array($dato)) {
+                            echo "<tr>";
+                            echo "<td>" . $fila['id_cordinador'] . "</td>";
+                            echo "<td>" . $fila['nombre_cordinador'] . "</td>";
+                            echo "<td>" . $fila['direccion_cordinador'] . "</td>";
+                            echo "<td>" . $fila['telefono_cordinador'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='2'>No se encontraron resultados</td></tr>";
+                    }
+
+                    mysqli_close($conexion);
+                    ?>
+                </tbody>
+</table>
+</div>
+<div class="card-footer">
+    <div class="d-flex justify-content-end">
+        <nav aria-label="Selector de Páginas">
+            <ul class="pagination">
+                                          <?php if ($paginaActual > 1) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } ?>
+  
+                                          <?php for ($i = 1; $i <= $totalPaginas; $i++) { ?>
+                                              <?php if ($i == $paginaActual) { ?>
+                                                  <li class="page-item active" aria-current="page">
+                                                      <a class="page-link" href="#"><?php echo $i; ?> <span class="visually-hidden">(Página actual)</span></a>
+                                                  </li>
+                                              <?php } else { ?>
+                                                  <li class="page-item"><a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                              <?php } ?>
+                                          <?php } ?>
+  
+                                          <?php if ($paginaActual < $totalPaginas) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>">Siguiente</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguiente</a>
+                                              </li>
+                                          <?php } ?>
+                                          </ul>
+        </nav>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+<!-- ...  contenidos de la Seccion Coordinador ... -->
+
+
+
+                                    <!-- ...  contenidos de la Seccion Líder ... -->
+                                    
+                                    <div class="tab-pane fade" id="lider_tab">
+            <h4>Líder</h4>
+            <p>Conozca toda la información relacionada al Líder</p>
+
+
+            <div class="container mt-4">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Formulario de Líder</h5>
+
+
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="idlider" class="form-label">ID del Líder</label>
+                                <select class="form-select" id="idlider" name="idlider">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT id_lider FROM lider";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['id_lider'] . '">' . $row['id_lider'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="nombrelider" class="form-label">Nombre del Líder</label>
+                                <select class="form-select" id="nombrelider" name="nombrelider">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_lider FROM lider";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_lider'] . '">' . $row['nombre_lider'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="direccionLider" class="form-label">Direccion Líder</label>
+                                <select class="form-select" id="direccionLider" name="direccionLider">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT direccion_lider FROM lider";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['direccion_lider'] . '">' . $row['direccion_lider'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefonoLider" class="form-label">Teléfono Líder</label>
+                                <select class="form-select" id="telefonoLider" name="telefonoLider">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT telefono_lider FROM lider";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['telefono_lider'] . '">' . $row['telefono_lider'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nombreCoordinadorLider" class="form-label">Coordinador</label>
+                                <select class="form-select" id="nombreCoordinadorLider" name="nombreCoordinadorLider">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_cordinador FROM lider";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_cordinador'] . '">' . $row['nombre_cordinador'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-orange" name="liderSubmit">Filtrar</button>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+<!-- Mostrar resultados -->
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Resultado de la Vista y Filtro</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID del Líder</th>
+                        <th>Nombre del Líder</th>
+                        <th>Direccion del Líder</th>
+                        <th>Teléfono del Líder</th>
+                        <th>Coordinador</th>
+                    </tr>
+                </thead>
+                
+                    <?php
+                    $conexion = mysqli_connect("localhost", "root", "", "seguidores");
+
+                    // Obtener los valores del filtro si se ha enviado el formulario
+                    $id_lider = isset($_POST['idlider']) ? $_POST['idlider'] : '';
+                    $nombre_lider = isset($_POST['nombrelider']) ? $_POST['nombrelider'] : '';
+                    $direccion_lider = isset($_POST['direccionLider']) ? $_POST['direccionLider'] : '';
+                    $telefono_lider = isset($_POST['telefonoLider']) ? $_POST['telefonoLider'] : '';
+                    $nombre_cordinador = isset($_POST['nombreCoordinadorLider']) ? $_POST['nombreCoordinadorLider'] : '';
+                    // Construir consulta SQL con filtros
+                    $SQL = "SELECT * FROM lider WHERE 1=1";
+
+                    if ($id_lider !== "") {
+                        $SQL .= " AND id_lider = '$id_lider'";
+                    }
+                    if ($nombre_lider !== "") {
+                        $SQL .= " AND nombre_lider = '$nombre_lider'";
+                    }
+                    if ($direccion_lider !== "") {
+                        $SQL .= " AND direccion_lider = '$direccion_lider'";
+                    }
+                    if ($telefono_lider !== "") {
+                        $SQL .= " AND telefono_lider = '$telefono_lider'";
+                    }
+                    if ($nombre_cordinador !== "") {
+                        $SQL .= " AND nombre_cordinador = '$nombre_cordinador'";
+                    }
+
+                      // Configuración de la paginación
+                    $resultadosPorPagina = 10; // Número de resultados por página
+                    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // Página actual (por defecto la primera)
+                    $inicio = ($paginaActual - 1) * $resultadosPorPagina; // Registro de inicio para la consulta
+
+                    $totalResultados = mysqli_num_rows(mysqli_query($conexion, $SQL)); // Total de resultados
+                    $totalPaginas = ceil($totalResultados / $resultadosPorPagina); // Total de páginas
+
+                    // Agregar el límite de resultados para la paginación
+                    $SQL .= " LIMIT $inicio, $resultadosPorPagina";
+
+                    $dato = mysqli_query($conexion, $SQL);
+                    ?>
+                    <tbody>
+                    <?php
+                    if (mysqli_num_rows($dato) > 0) {
+                        while ($fila = mysqli_fetch_array($dato)) {
+                            echo "<tr>";
+                            echo "<td>" . $fila['id_lider'] . "</td>";
+                            echo "<td>" . $fila['nombre_lider'] . "</td>";
+                            echo "<td>" . $fila['direccion_lider'] . "</td>";
+                            echo "<td>" . $fila['telefono_lider'] . "</td>";
+                            echo "<td>" . $fila['nombre_cordinador'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='2'>No se encontraron resultados</td></tr>";
+                    }
+
+                    mysqli_close($conexion);
+                    ?>
+                </tbody>
+</table>
+</div>
+<div class="card-footer">
+    <div class="d-flex justify-content-end">
+        <nav aria-label="Selector de Páginas">
+            <ul class="pagination">
+                                          <?php if ($paginaActual > 1) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } ?>
+  
+                                          <?php for ($i = 1; $i <= $totalPaginas; $i++) { ?>
+                                              <?php if ($i == $paginaActual) { ?>
+                                                  <li class="page-item active" aria-current="page">
+                                                      <a class="page-link" href="#"><?php echo $i; ?> <span class="visually-hidden">(Página actual)</span></a>
+                                                  </li>
+                                              <?php } else { ?>
+                                                  <li class="page-item"><a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                              <?php } ?>
+                                          <?php } ?>
+  
+                                          <?php if ($paginaActual < $totalPaginas) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>">Siguiente</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguiente</a>
+                                              </li>
+                                          <?php } ?>
+                                          </ul>
+        </nav>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+
+<!-- ...  contenidos de la Seccion Líder ... -->
+
+
+
+                                    <!-- ...  contenidos de la Seccion Votante ... -->
+                                    
+                                    </div>
+          <div class="tab-pane fade" id="votantes_tab">
+            <h4>Votantes</h4>
+            <p>Conozca toda la información relacionada al Votantes</p>
+
+            <div class="container mt-4">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Formulario de Votantes</h5>
+
+
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="idvotante" class="form-label">ID del Votante</label>
+                                <select class="form-select" id="idvotante" name="idvotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT id_votante  FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['id_votante'] . '">' . $row['id_votante'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="nombrevotante" class="form-label">Nombre del Votante</label>
+                                <select class="form-select" id="nombrevotante" name="nombrevotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_votante FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_votante'] . '">' . $row['nombre_votante'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="direccioncasavotante" class="form-label">Direccion del Votante</label>
+                                <select class="form-select" id="direccioncasavotante" name="direccioncasavotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT direccion_casa_votante FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['direccion_casa_votante'] . '">' . $row['direccion_casa_votante'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nombrelidervotante" class="form-label">Líder del Votante</label>
+                                <select class="form-select" id="nombrelidervotante" name="nombrelidervotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT nombre_lider FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['nombre_lider'] . '">' . $row['nombre_lider'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="lugarvotante" class="form-label">Lugar de Votacion </label>
+                                <select class="form-select" id="lugarvotante" name="lugarvotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT lugar_votante FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['lugar_votante'] . '">' . $row['lugar_votante'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mesavotante" class="form-label">mesa de Votacion </label>
+                                <select class="form-select" id="mesavotante" name="mesavotante">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    $sql = "SELECT DISTINCT mesa FROM votantes";
+                                    $result = $conn->query($sql);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['mesa'] . '">' . $row['mesa'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-orange" name="votanteSubmit">Filtrar</button>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+<!-- Mostrar resultados -->
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Resultado de la Vista y Filtro</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID del votante</th>
+                        <th>Nombre del votante</th>
+                        <th>Direccion del votante</th>
+                        <th>Nombre del Líder</th>
+                        <th>Lugar de votación</th>
+                        <th>mesa</th>
+                    </tr>
+                </thead>
+                
+                    <?php
+                    $conexion = mysqli_connect("localhost", "root", "", "seguidores");
+
+                    // Obtener los valores del filtro si se ha enviado el formulario
+                    $id_votante = isset($_POST['idvotante']) ? $_POST['idvotante'] : '';
+                    $nombre_votante = isset($_POST['nombrevotante']) ? $_POST['nombrevotante'] : '';
+                    $direccion_casa_votante = isset($_POST['direccioncasavotante']) ? $_POST['direccioncasavotante'] : '';
+                    $nombre_lider = isset($_POST['nombrelidervotante']) ? $_POST['nombrelidervotante'] : '';
+                    $lugar_votante = isset($_POST['lugarvotante']) ? $_POST['lugarvotante'] : '';
+                    $mesa = isset($_POST['mesavotante']) ? $_POST['mesavotante'] : '';
+                    // Construir consulta SQL con filtros
+                    $SQL = "SELECT * FROM votantes WHERE 1=1";
+
+                    if ($id_votante !== "") {
+                        $SQL .= " AND id_votante = '$id_votante'";
+                    }
+                    if ($nombre_votante !== "") {
+                        $SQL .= " AND nombre_votante = '$nombre_votante'";
+                    }
+                    if ($direccion_casa_votante !== "") {
+                        $SQL .= " AND direccion_casa_votante = '$direccion_casa_votante'";
+                    }
+                    if ($nombre_lider !== "") {
+                        $SQL .= " AND nombre_lider = '$nombre_lider'";
+                    }
+                    if ($lugar_votante !== "") {
+                        $SQL .= " AND lugar_votante = '$lugar_votante'";
+                    }
+                    if ($mesa !== "") {
+                        $SQL .= " AND mesa = '$mesa'";
+                    }
+
+                      // Configuración de la paginación
+                    $resultadosPorPagina = 10; // Número de resultados por página
+                    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // Página actual (por defecto la primera)
+                    $inicio = ($paginaActual - 1) * $resultadosPorPagina; // Registro de inicio para la consulta
+
+                    $totalResultados = mysqli_num_rows(mysqli_query($conexion, $SQL)); // Total de resultados
+                    $totalPaginas = ceil($totalResultados / $resultadosPorPagina); // Total de páginas
+
+                    // Agregar el límite de resultados para la paginación
+                    $SQL .= " LIMIT $inicio, $resultadosPorPagina";
+
+                    $dato = mysqli_query($conexion, $SQL);
+                    ?>
+                    <tbody>
+                    <?php
+                    if (mysqli_num_rows($dato) > 0) {
+                        while ($fila = mysqli_fetch_array($dato)) {
+                            echo "<tr>";
+                            echo "<td>" . $fila['id_votante'] . "</td>";
+                            echo "<td>" . $fila['nombre_votante'] . "</td>";
+                            echo "<td>" . $fila['direccion_casa_votante'] . "</td>";
+                            echo "<td>" . $fila['nombre_lider'] . "</td>";
+                            echo "<td>" . $fila['lugar_votante'] . "</td>";
+                            echo "<td>" . $fila['mesa'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='2'>No se encontraron resultados</td></tr>";
+                    }
+
+                    mysqli_close($conexion);
+                    ?>
+                </tbody>
+</table>
+</div>
+<div class="card-footer">
+    <div class="d-flex justify-content-end">
+        <nav aria-label="Selector de Páginas">
+            <ul class="pagination">
+                                          <?php if ($paginaActual > 1) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                              </li>
+                                          <?php } ?>
+  
+                                          <?php for ($i = 1; $i <= $totalPaginas; $i++) { ?>
+                                              <?php if ($i == $paginaActual) { ?>
+                                                  <li class="page-item active" aria-current="page">
+                                                      <a class="page-link" href="#"><?php echo $i; ?> <span class="visually-hidden">(Página actual)</span></a>
+                                                  </li>
+                                              <?php } else { ?>
+                                                  <li class="page-item"><a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                              <?php } ?>
+                                          <?php } ?>
+  
+                                          <?php if ($paginaActual < $totalPaginas) { ?>
+                                              <li class="page-item">
+                                                  <a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>">Siguiente</a>
+                                              </li>
+                                          <?php } else { ?>
+                                              <li class="page-item disabled">
+                                                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguiente</a>
+                                              </li>
+                                          <?php } ?>
+                                          </ul>
+        </nav>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+           <!-- ...  contenidos de la Seccion Votante ... -->
 </body>
 </html>
