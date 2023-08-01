@@ -309,6 +309,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
             <a class="nav-link" id="tab6" data-bs-toggle="tab" href="#votantes_tab">Votantes</a>
           </li>
         </ul>
+        <script>
+  // Función para establecer la pestaña activa en el almacenamiento local.
+  function guardarPestanaActiva() {
+    var pestanaActiva = document.querySelector('.nav-link.active');
+    if (pestanaActiva) {
+      localStorage.setItem('pestanaActiva', pestanaActiva.id);
+    }
+  }
+
+  // Función para restaurar la última pestaña activa desde el almacenamiento local.
+  function restaurarPestanaActiva() {
+    var pestanaGuardada = localStorage.getItem('pestanaActiva');
+    if (pestanaGuardada) {
+      var pestana = document.getElementById(pestanaGuardada);
+      if (pestana) {
+        pestana.click(); // Simula un clic en la pestaña guardada para activarla.
+      }
+    }
+  }
+
+  // Agregar un evento para guardar la pestaña activa cuando se haga clic en una pestaña.
+  var pestanas = document.querySelectorAll('.nav-link');
+  pestanas.forEach(function (pestana) {
+    pestana.addEventListener('click', guardarPestanaActiva);
+  });
+
+  // Restaurar la última pestaña activa cuando se cargue la página.
+  document.addEventListener('DOMContentLoaded', restaurarPestanaActiva);
+</script>
         <div class="tab-content mt-2">
           <div class="tab-pane fade show active" id="lugar_tab">
             <h4>Lugar</h4>
@@ -497,7 +526,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
             </div>
         </div>
     </div>
-</form>
     </div>
 
      <!-- ...  contenidos de la Seccion Comuna ... -->
@@ -662,7 +690,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </div>
 </div>
 </div>
-</form>
 </div>
  <!-- ...  contenidos de la Seccion Comuna ... -->
 
@@ -858,7 +885,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </div>
 </div>
 </div>
-</form>
 </div>
 <!-- ...  contenidos de la Seccion Coordinador ... -->
 
@@ -1076,7 +1102,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </div>
 </div>
 </div>
-</form>
 </div>
 
 <!-- ...  contenidos de la Seccion Líder ... -->
@@ -1085,7 +1110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 
                                     <!-- ...  contenidos de la Seccion Votante ... -->
                                     
-                                    </div>
+                                  
           <div class="tab-pane fade" id="votantes_tab">
             <h4>Votantes</h4>
             <p>Conozca toda la información relacionada al Votantes</p>
@@ -1310,12 +1335,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                                           </ul>
         </nav>
     </div>
+    </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</form>
 </div>
            <!-- ...  contenidos de la Seccion Votante ... -->
 
