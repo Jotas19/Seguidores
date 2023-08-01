@@ -560,6 +560,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     <tr>
                         <th>ID de Comuna</th>
                         <th>Nombre de la comuna</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 
@@ -602,6 +604,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                             echo "<tr>";
                             echo "<td>" . $fila['id_comuna'] . "</td>";
                             echo "<td>" . $fila['nombre_lugar'] . "</td>";
+                              // Botón Editar
+                              echo "<td><button class='btn btn-primary btn-editar' data-bs-toggle='modal' data-bs-target='#actualizarComunaModal' data-id='" . $fila['id_comuna'] . "'><i class='fas fa-edit'></i> Editar</button></td>";
+
+                              // Botón Eliminar
+                              echo "<td><a href='url_eliminar?id=" . $fila['id_comuna'] . "' class='btn btn-danger'>Eliminar</a></td>";
+
                             echo "</tr>";
                         }
                     } else {
@@ -1310,5 +1318,65 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </form>
 </div>
            <!-- ...  contenidos de la Seccion Votante ... -->
+
+           <div class="modal fade" data-bs-backdrop="static" id="actualizarComunaModal" tabindex="-1" aria-labelledby="crearComunaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="crearComunaModalLabel">Crear Comuna</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <form method="POST"> <!-- Asegúrate de agregar method="POST" aquí -->
+                    <div class="mb-3">
+                        <label for="inputIdComuna" class="form-label">ID de Comuna</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputIdComuna" name="inputIdComuna">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputNombreLugarFK" class="form-label">Nombre del Lugar FK</label>
+                        <input type="text" autocomplete="off" class="form-control" id="inputNombreLugarFK" name="inputNombreLugarFK">
+                    </div>
+                    <button type="submit" class="btn btn-orange">Crear</button>
+                </form>
+
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <?php
+
+                if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                  
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "";
+                    $dbname = "seguidores";
+
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+
+                    
+                    if ($conn->connect_error) {
+                        die("Error en la conexión: " . $conn->connect_error);
+                    }
+
+                  
+                    $idComuna = $_POST["inputIdComuna"];
+                    $nombreLugarFK = $_POST["inputNombreLugarFK"];
+
+                  
+                    $sql = "INSERT INTO comuna (id_comuna, nombre_lugar) 
+                            VALUES ('$idComuna', '$nombreLugarFK')";
+
+                    if ($conn->query($sql) === TRUE) {
+                        echo '<div class="alert alert-success" role="alert">La comuna ha sido creada exitosamente.</div>';
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">Error al crear la comuna: ' . $conn->error . '</div>';
+                    }
+
+                    
+                    $conn->close();
+                }
+                ?>
+
 </body>
 </html>
