@@ -213,10 +213,6 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                             <a class="nav-link" id="tab3" data-bs-toggle="tab" href="#content3">Editar Usuario</a>
                           </li>
                           
-
-                          
-
-                          
                         </ul>
                         <div class="tab-content mt-2">
                           <div class="tab-pane fade show active" id="content1">

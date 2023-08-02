@@ -422,6 +422,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                                     <th>Dirección del Lugar</th>
                                     <th>Cantidad de Mesas</th>
                                     <th>Comuna</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -433,7 +435,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                                 $direccionLugar = isset($_POST['direccionSelect']) ? $_POST['direccionSelect'] : '';
                                 $cantidadMesas = isset($_POST['cantidadMesasSelect']) ? $_POST['cantidadMesasSelect'] : '';
                                 $comuna = isset($_POST['comunaSelect']) ? $_POST['comunaSelect'] : '';
-
+                                
                                 // Construir consulta SQL con filtros
                                 $SQL = "SELECT * FROM lugar WHERE 1=1";
 
@@ -466,14 +468,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     $SQL .= " LIMIT $inicio, $resultadosPorPagina";
 
                     $dato = mysqli_query($conexion, $SQL);
+                    $contador_lugar = 0;
 
                     if (mysqli_num_rows($dato) > 0) {
+                      $contador_lugar++;
                         while ($fila = mysqli_fetch_array($dato)) {
                             echo "<tr>";
                             echo "<td>" . $fila['lugar_votante'] . "</td>";
                             echo "<td>" . $fila['direccion_lugar'] . "</td>";
                             echo "<td>" . $fila['cantidad_mesas'] . "</td>";
                             echo "<td>" . $fila['comuna'] . "</td>";
+                            echo "<td><form action='../editar/editar_lugar.php' method='POST'><input type='hidden' name='posicion_editar_lugar' value='" . $contador_lugar . "'><button type='submit' class='btn btn-primary'>Editar</button></form></td>";
+                            echo "<td><a  class='btn btn-danger'>Eliminar</a></td>";
+
                             echo "</tr>";
                         }
                     } else {
@@ -627,16 +634,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     ?>
                     <tbody>
                     <?php
+                    
                     if (mysqli_num_rows($dato) > 0) {
+                      $contador_comuna=0;
                         while ($fila = mysqli_fetch_array($dato)) {
+                          $contador_comuna++;
                             echo "<tr>";
                             echo "<td>" . $fila['id_comuna'] . "</td>";
                             echo "<td>" . $fila['nombre_lugar'] . "</td>";
                               // Botón Editar
-                              echo "<td><button class='btn btn-primary btn-editar' data-bs-toggle='modal' data-bs-target='#actualizarComunaModal' data-id='" . $fila['id_comuna'] . "'><i class='fas fa-edit'></i> Editar</button></td>";
-
+                              echo "<td><form action='editar/editar_comuna.php' method='POST'><input type='hidden' name='posicion_editar' value='" . $contador_comuna . "'><button type='submit' class='btn btn-primary'>Editar</button></form></td>";
                               // Botón Eliminar
-                              echo "<td><a href='url_eliminar?id=" . $fila['id_comuna'] . "' class='btn btn-danger'>Eliminar</a></td>";
+                              echo "<td><a  class='btn btn-danger'>Eliminar</a></td>";
 
                             echo "</tr>";
                         }
@@ -646,6 +655,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 
                     mysqli_close($conexion);
                     ?>
+
+
+
+
                 </tbody>
 </table>
 </div>
@@ -783,6 +796,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                         <th>Nombre del Coordinador</th>
                         <th>Direccion del Coordinador</th>
                         <th>Teléfono del Coordinador</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 
@@ -823,16 +838,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     $SQL .= " LIMIT $inicio, $resultadosPorPagina";
 
                     $dato = mysqli_query($conexion, $SQL);
+                    $contador_cordinador = 0;
                     ?>
                     <tbody>
                     <?php
                     if (mysqli_num_rows($dato) > 0) {
+                      $contador_cordinador++;
                         while ($fila = mysqli_fetch_array($dato)) {
                             echo "<tr>";
                             echo "<td>" . $fila['id_cordinador'] . "</td>";
                             echo "<td>" . $fila['nombre_cordinador'] . "</td>";
                             echo "<td>" . $fila['direccion_cordinador'] . "</td>";
                             echo "<td>" . $fila['telefono_cordinador'] . "</td>";
+                            echo "<td><form action='editar/editar_cordinador.php' method='POST'><input type='hidden' name='posicion_editar_cordinador' value='" . $contador_cordinador . "'><button type='submit' class='btn btn-primary'>Editar</button></form></td>";
+                            echo "<td><a  class='btn btn-danger'>Eliminar</a></td>";
+
                             echo "</tr>";
                         }
                     } else {
@@ -996,6 +1016,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                         <th>Direccion del Líder</th>
                         <th>Teléfono del Líder</th>
                         <th>Coordinador</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 
@@ -1039,10 +1061,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     $SQL .= " LIMIT $inicio, $resultadosPorPagina";
 
                     $dato = mysqli_query($conexion, $SQL);
+                    $contador_lider = 0;
                     ?>
                     <tbody>
                     <?php
                     if (mysqli_num_rows($dato) > 0) {
+                      $contador_lider++;
                         while ($fila = mysqli_fetch_array($dato)) {
                             echo "<tr>";
                             echo "<td>" . $fila['id_lider'] . "</td>";
@@ -1050,6 +1074,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                             echo "<td>" . $fila['direccion_lider'] . "</td>";
                             echo "<td>" . $fila['telefono_lider'] . "</td>";
                             echo "<td>" . $fila['nombre_cordinador'] . "</td>";
+                            echo "<td><form action='editar/editar_lider.php' method='POST'><input type='hidden' name='posicion_editar_lider' value='" . $contador_lider . "'><button type='submit' class='btn btn-primary'>Editar</button></form></td>";
+                            echo "<td><a  class='btn btn-danger'>Eliminar</a></td>";
+
                             echo "</tr>";
                         }
                     } else {
@@ -1105,8 +1132,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </div>
 
 <!-- ...  contenidos de la Seccion Líder ... -->
-
-
 
                                     <!-- ...  contenidos de la Seccion Votante ... -->
                                     
@@ -1229,6 +1254,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                         <th>Nombre del Líder</th>
                         <th>Lugar de votación</th>
                         <th>mesa</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 
@@ -1276,10 +1303,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                     $SQL .= " LIMIT $inicio, $resultadosPorPagina";
 
                     $dato = mysqli_query($conexion, $SQL);
+                    $contador_votante = 0;
                     ?>
                     <tbody>
                     <?php
                     if (mysqli_num_rows($dato) > 0) {
+                      $contador_votante++;
                         while ($fila = mysqli_fetch_array($dato)) {
                             echo "<tr>";
                             echo "<td>" . $fila['id_votante'] . "</td>";
@@ -1288,6 +1317,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
                             echo "<td>" . $fila['nombre_lider'] . "</td>";
                             echo "<td>" . $fila['lugar_votante'] . "</td>";
                             echo "<td>" . $fila['mesa'] . "</td>";
+                            echo "<td><form action='editar/editar_votante.php' method='POST'><input type='hidden' name='posicionvotante' value='" . $contador_votante . "'><button type='submit' class='btn btn-primary'>Editar</button></form></td>";
+                            echo "<td><a  class='btn btn-danger'>Eliminar</a></td>";
+
                             echo "</tr>";
                         }
                     } else {
@@ -1344,64 +1376,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["votanteSubmit"])) {
 </div>
            <!-- ...  contenidos de la Seccion Votante ... -->
 
-           <div class="modal fade" data-bs-backdrop="static" id="actualizarComunaModal" tabindex="-1" aria-labelledby="crearComunaModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="crearComunaModalLabel">Crear Comuna</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <form method="POST"> <!-- Asegúrate de agregar method="POST" aquí -->
-                    <div class="mb-3">
-                        <label for="inputIdComuna" class="form-label">ID de Comuna</label>
-                        <input type="text" autocomplete="off" class="form-control" id="inputIdComuna" name="inputIdComuna">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputNombreLugarFK" class="form-label">Nombre del Lugar FK</label>
-                        <input type="text" autocomplete="off" class="form-control" id="inputNombreLugarFK" name="inputNombreLugarFK">
-                    </div>
-                    <button type="submit" class="btn btn-orange">Crear</button>
-                </form>
-
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <?php
-
-                if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                  
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "";
-                    $dbname = "seguidores";
-
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-
-                    
-                    if ($conn->connect_error) {
-                        die("Error en la conexión: " . $conn->connect_error);
-                    }
-
-                  
-                    $idComuna = $_POST["inputIdComuna"];
-                    $nombreLugarFK = $_POST["inputNombreLugarFK"];
-
-                  
-                    $sql = "INSERT INTO comuna (id_comuna, nombre_lugar) 
-                            VALUES ('$idComuna', '$nombreLugarFK')";
-
-                    if ($conn->query($sql) === TRUE) {
-                        echo '<div class="alert alert-success" role="alert">La comuna ha sido creada exitosamente.</div>';
-                    } else {
-                        echo '<div class="alert alert-danger" role="alert">Error al crear la comuna: ' . $conn->error . '</div>';
-                    }
-
-                    
-                    $conn->close();
-                }
-                ?>
-
+       
 </body>
 </html>
