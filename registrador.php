@@ -81,9 +81,7 @@ if (isset($_SESSION['tipo_usuario'])) {
                   <li class="nav-item">
                     <a class="nav-link" href="visualizador.php">Visualizacion de Datos</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link <?php if($_SESSION['tipo_usuario'] === "registrador" || $_SESSION['tipo_usuario'] === "visualizador"){echo "disabled";} ?>" href="#">Gestión de Usuarios</a>
-                  </li>
+
                   <li class="nav-item dropdown d-lg-none">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
                       aria-expanded="false">

@@ -79,9 +79,7 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
                   <li class="nav-item">
                     <a class="nav-link" href="visualizador.php">Visualizacion de Datos</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Gestión de Usuarios</a>
-                  </li>
+                  
                   <li class="nav-item dropdown d-lg-none">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
                       aria-expanded="false">
@@ -112,49 +110,33 @@ if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'administ
 
     <h1 class="h1 m-4 text-center slide-in">Bienvenido al portal de Administrador</h1>
     <div class="container mt-4 slide-in">
-        <div class="row justify-content-center">
-          <div class="col-3 mb-4 ampliacion-elemento">
-            <div class="card ampliacion-elemento" style="width: 18rem;">
-              <img src="src/card1_admin.jpeg" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Crea, elimina, actualiza y elimina los datos.</h5>
-                <p class="card-text">En esta pestaña, puedes realizar diversas acciones para interactuar con los datos almacenados en la base de datos.</p>
-                <button type="button" class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver más</button>
-              </div>
+    <div class="row justify-content-center">
+        <!-- Tarjeta 2: Visualiza y filtra los datos. -->
+        <div class="col-sm-6 col-md-4 mb-4 ampliacion-elemento">
+            <div class="card ampliacion-elemento" style="width: 100%;">
+                <img src="src/card5_admin.jpeg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Visualiza y filtra los datos.</h5>
+                    <p class="card-text">En esta pestaña, puedes visualizar y filtrar los datos almacenados en la base de datos de manera eficiente. Estas opciones te brindan la flexibilidad necesaria para visualizar y analizar los datos de forma eficaz.</p>
+                    <a href="visualizador.php" class="btn btn-orange">Ver más</a>
+                </div>
             </div>
-          </div>
-          <div class="col-3 mb-4 ampliacion-elemento">
-            <div class="card ampliacion-elemento" style="width: 18rem;">
-              <img src="src/card5_admin.jpeg" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Visualiza y filtra los datos.</h5>
-                <p class="card-text">En esta pestaña, puedes visualizar y filtrar los datos almacenados en la base de datos de manera eficiente. Estas opciones te brindan la flexibilidad necesaria para visualizar y analizar los datos de forma eficaz.</p>
-                <a href="visualizador.php" class="btn btn-orange">Ver más</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3 mb-4 ampliacion-elemento">
-            <div class="card ampliacion-elemento" style="width: 18rem;">
-              <img src="src/card3_admin.jpeg" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Gestiona los usuarios del Software.</h5>
-                <p class="card-text">En esta función, puedes gestionar los usuarios del software de una manera efectiva y eficiente. Te ofrecemos diversas opciones para administrar y controlar los usuarios según tus necesidades específicas.</p>
-                <a href="#" data-bs-target="#manejo_usuario_modal" data-bs-toggle="modal" class="btn btn-orange">Ver más</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-3 mb-4 ampliacion-elemento">
-            <div class="card ampliacion-elemento" style="width: 18rem;">
-              <img src="src/card4_admin.jpeg" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Información adicional</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-orange">Ver más</a>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+
+        <!-- Tarjeta 3: Gestiona los usuarios del Software. -->
+        <div class="col-sm-6 col-md-4 mb-4 ampliacion-elemento">
+            <div class="card ampliacion-elemento" style="width: 100%;">
+                <img src="src/card3_admin.jpeg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Gestiona los usuarios del Software.</h5>
+                    <p class="card-text">En esta función, puedes gestionar los usuarios del software de una manera efectiva y eficiente. Te ofrecemos diversas opciones para administrar y controlar los usuarios según tus necesidades específicas.</p>
+                    <a href="#" data-bs-target="#manejo_usuario_modal" data-bs-toggle="modal" class="btn btn-orange">Ver más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
       
 
       <!-- Modal CRUD-->
